@@ -7,27 +7,36 @@ using namespace std;
 
 template<typename T>
 class BandedMatrix{
+	int N;
 	int lowerBandwidth;
 	int upperBandwidth;
 	vector< vector<T> > matrix;
 public:	
-	BandedMatrix(const int LowerBandwidth, const int UpperBandwidth) {
+	BandedMatrix(const int size, const int LowerBandwidth, const int UpperBandwidth) {
 		if(lowerBandwidth<0 || upperBandwidth) {
 			cout << "Error: Invalid Bandwidth value(s)\n";
 			return;
 		}
+		N = size;
 		lowerBandwidth = LowerBandwidth;
 		upperBandwidth = UpperBandwidth;
+
+		// Size allocation to incorporate N
 		matrix.resize(rows, vector<T>(columns));
 	}
 
-	BandedMatrix(const int LowerBandwidth, const int UpperBandwidth, const int Value) {
+	BandedMatrix(const int size, const int LowerBandwidth, const int UpperBandwidth, 
+				 const int Value) {
 		if(lowerBandwidth<0 || upperBandwidth) {
 			cout << "Error: Invalid Bandwidth value(s)\n";
 			return;
 		}
+		N = size;
 		lowerBandwidth = LowerBandwidth;
 		upperBandwidth = UpperBandwidth;
+
+
+		// Size allocation, slightly different
 		matrix.resize(rows, vector<T>(columns, Value));
 	}
 
@@ -37,6 +46,12 @@ public:
 
 	int UpperBandwidth() const {
 		return upperBandwidth;
+	}
+
+	void Set(int i, int j) {
+		int x = i-j+upperBandwidth, y = j;
+
+
 	}
 
 	std::vector<T>& operator[] (int index) {
