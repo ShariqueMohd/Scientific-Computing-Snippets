@@ -13,7 +13,7 @@ class BandedMatrix{
 	vector< vector<T> > matrix;
 public:	
 	BandedMatrix(const int size, const int LowerBandwidth, const int UpperBandwidth) {
-		if(lowerBandwidth<0 || upperBandwidth) {
+		if(lowerBandwidth<0 || upperBandwidth<0) {
 			cout << "Error: Invalid Bandwidth value(s)\n";
 			return;
 		}
@@ -22,12 +22,12 @@ public:
 		upperBandwidth = UpperBandwidth;
 
 		// Size allocation to incorporate N
-		matrix.resize(rows, vector<T>(columns));
+		matrix.resize(N, vector<T>(upperBandwidth + lowerBandwidth, 0));
 	}
 
 	BandedMatrix(const int size, const int LowerBandwidth, const int UpperBandwidth, 
 				 const int Value) {
-		if(lowerBandwidth<0 || upperBandwidth) {
+		if(lowerBandwidth<0 || upperBandwidth<0) {
 			cout << "Error: Invalid Bandwidth value(s)\n";
 			return;
 		}
@@ -35,9 +35,12 @@ public:
 		lowerBandwidth = LowerBandwidth;
 		upperBandwidth = UpperBandwidth;
 
-
 		// Size allocation, slightly different
-		matrix.resize(rows, vector<T>(columns, Value));
+		matrix.resize(N, vector<T>(upperBandwidth + lowerBandwidth, Value));
+	}
+
+	int size() const {
+		return N;
 	}
 
 	int LowerBandwidth() const {
@@ -48,17 +51,36 @@ public:
 		return upperBandwidth;
 	}
 
-	void Set(int i, int j) {
+	void Set(int i, int j, T value) {
+		if(i<0 || j<0) {
+			cout << "Error: Invalid index\n";
+			return;
+		}
 		int x = i-j+upperBandwidth, y = j;
-
+		if (x<0 || (i-j)>=lowerBandwidth) {
+			return;
+		}
+		matrix[x][y] = value;
 
 	}
 
-	std::vector<T>& operator[] (int index) {
-		return matrix[index];
+	T Get(int i, int j) {
+		if(i<0 || j<0) {
+			cout << "Error: Invalid index\n";
+			return T(-1);
+		}
+		int x = i-j+upperBandwidth, y = j;
+		if (x<0 || (i-j)>=lowerBandwidth) {
+			return T(0);
+		}
+		return matrix[x][y];
 	}
 
-	template<E>
+	T operator() (int i, int j) {
+		Get(i,j);
+	}
+
+	template<typename E>
 	void operator= (const BandedMatrix<E>& Matrix) {
 		if(Matrix.LowerBandwidth() != lowerBandwidth || 
 		   Matrix.UpperBandwidth() != upperBandwidth) {
@@ -70,4 +92,4 @@ public:
 };
 
 
-#define __BANDED_MATRIX__
+#endif 
