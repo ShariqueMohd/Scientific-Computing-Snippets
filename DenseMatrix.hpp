@@ -20,17 +20,17 @@ public:
 		}
 		rows = Rows;
 		columns = Columns;
-		matrix.resize(rows, vector<T>(columns));
+		matrix.resize(rows, vector<T>(columns,0));
 	}
 
-	DenseMatrix(const int Rows=1, const int Columns=1,const int Value) {
+	DenseMatrix(const int Rows, const int Columns,const int Value) {
 		if(Rows<0 || Columns<0) {
 			cout << "Invalid Dimensions\n";
 			return;
 		}
 		rows = Rows;
 		columns = Columns;
-		rows.resize(rows, vector<T>(columns, Value));	
+		matrix.resize(rows, vector<T>(columns, Value));	
 	}
 
 	int Rows() const {
@@ -45,12 +45,20 @@ public:
 		return matrix[index];
 	}
 
-	template<E>
-	void operator= (const DenseMatrix<E>& Matrix) {
+	T operator() (int i, int j) {
+		return matrix[i][j];
+	}
+
+	template<typename E>
+	void operator= (const DenseMatrix<E> Matrix) {
 		if (Matrix.Rows() != rows || Matrix.Columns() != columns) {
 			throw "Failed: Invalid dimensions! Cannot equate.\n";
 		}
-		(*this) = matrix;
+		for(int i=0; i<rows; i++) {
+			for(int j=0; j<columns; j++) {
+				matrix[i][j] = Matrix[i][j];
+			}
+		}
 	}
 };
 
