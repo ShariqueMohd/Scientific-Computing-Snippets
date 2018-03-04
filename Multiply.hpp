@@ -3,6 +3,8 @@
 
 #include "DenseMatrix.hpp"
 #include "BandedMatrix.hpp"
+#include "COO.hpp"
+#include "CSR.hpp"
 
 template<typename T>
 DenseMatrix<T> operator* (DenseMatrix<T> &A, DenseMatrix<T> &B) {
@@ -45,6 +47,28 @@ COO<T> operator* (COO<T> &A, COO<T> &B) {
 			} 
 		}
 	}
+	return resultant;
+}
+
+template<typename T>
+CSR<T> operator* (COO<T> &A, COO<T> &B) {
+	CSR<T> resultant;
+	int row = A.Rows(), columns = B.Columns();
+	int cnt = 0;
+	for(int i=0; i<rows; i++) {
+		resultant.insertRowPointer(cnt);
+		for(int j=0; j<columns; j++) {
+			T sum = 0;
+			for(int k=0; k<A.Columns(); k++) {
+				sum += A(i,k) * B(k,j);
+			}
+			if(sum>0) {
+				resultant.insertValue(sum);
+				resultant.insertColumnIndex(j);
+			}
+		}
+	}
+	return resultant;
 }
 
 
