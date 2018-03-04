@@ -30,6 +30,23 @@ DenseMatrix<T> operator* (BandedMatrix<T> &A, BandedMatrix<T> &B) {
 	}
 }
 
+template<typename T>
+COO<T> operator* (COO<T> &A, COO<T> &B) {	
+	COO<T> resultant;
+	int rows = A.Rows(), columns = B.Columns();
+	for(int i=0; i<rows; i++) {
+		for(int j=0; j<columns; j++) {
+			T sum = 0;
+			for(int k=0; k<A.Columns(); k++) {
+				sum += A(i,k) * B(k,j);
+			}
+			if(sum>0) {
+				resultant.insert(i, j, sum);
+			} 
+		}
+	}
+}
+
 
 
 
