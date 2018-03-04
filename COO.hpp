@@ -1,6 +1,10 @@
 #ifndef __COO__
 #define __COO__
 
+#include <bits/stdc++.h>
+
+using namespace std;
+
 template<typename T>
 class COO {
 	int nz;
