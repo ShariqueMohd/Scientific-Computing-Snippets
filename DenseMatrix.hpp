@@ -33,6 +33,10 @@ public:
 		matrix.resize(rows, vector<T>(columns, Value));	
 	}
 
+	~DenseMatrix() {
+		matrix.clear();
+	}
+
 	int Rows() const {
 		return rows;
 	}
