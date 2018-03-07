@@ -77,7 +77,7 @@ public:
 	}
 
 	T operator() (int i, int j) {
-		Get(i,j);
+		return Get(i,j);
 	}
 
 	template<typename E>
